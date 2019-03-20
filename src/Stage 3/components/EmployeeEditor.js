@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 class EmployeeEditor extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       employee: null,
       originalEmployee: null,
@@ -10,9 +10,32 @@ class EmployeeEditor extends Component {
     };
   }
 
-  // componentWillReceiveProps
+  componentWillReceiveProps(props) { 
+    this.setState({
+      employee: Object.assign({}, props.seleted),
+      originalEmployee: props.selected,
+      notModified: false
+    })
 
-  // handleChange
+  }
+
+  handleChange(property, value) { 
+    if (this.state.notModified) { 
+      this.setState({
+        notModified: false
+      })
+    }
+    
+    var employeeCopy = Object.assign({}, this.state.employee);
+
+    employeeCopy[property] = value;
+
+    this.setState({
+      employee: employeeCopy
+    })
+
+  }
+
 
   save() {
     this.state.originalEmployee.updateName(this.state.employee.name);
@@ -34,13 +57,14 @@ class EmployeeEditor extends Component {
           this.state.employee
           ? 
           <div>
+
             <span id="employeeID"> ID: { this.state.employee.id } </span>
             <p id="employeeTitle"> { this.state.originalEmployee.name } </p>
             <br />
             <button id="saveBtn" className="confirmationButton" disabled={this.state.notModified} onClick={ this.save }> Save </button>
             <button className="neutralButton" disabled={this.state.notModified} onClick={ this.cancel }> Cancel </button>
             <br />
-            <span className="placeholderText"> Name </span>
+              <span className="placeholderText"> Name </span>
             <input className="materialInput" value={ this.state.employee.name } onChange={ (e) => { this.handleChange('name', e.target.value) } }></input>
             <span className="placeholderText"> Phone Number </span>
             <input className="materialInput" value={ this.state.employee.phone } onChange={ (e) => { this.handleChange('phone', e.target.value) } }></input>
