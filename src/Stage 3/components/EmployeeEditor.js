@@ -12,7 +12,7 @@ class EmployeeEditor extends Component {
 
   componentWillReceiveProps(props) { 
     this.setState({
-      employee: Object.assign({}, props.seleted),
+      employee: Object.assign({}, props.selected),
       originalEmployee: props.selected,
       notModified: false
     })
@@ -61,8 +61,8 @@ class EmployeeEditor extends Component {
             <span id="employeeID"> ID: { this.state.employee.id } </span>
             <p id="employeeTitle"> { this.state.originalEmployee.name } </p>
             <br />
-            <button id="saveBtn" className="confirmationButton" disabled={this.state.notModified} onClick={ this.save }> Save </button>
-            <button className="neutralButton" disabled={this.state.notModified} onClick={ this.cancel }> Cancel </button>
+            <button id="saveBtn" className="confirmationButton" disabled={this.state.notModified} onClick={ this.save.bind(this)}> Save </button>
+            <button className="neutralButton" disabled={this.state.notModified} onClick={ this.cancel.bind(this) }> Cancel </button>
             <br />
               <span className="placeholderText"> Name </span>
             <input className="materialInput" value={ this.state.employee.name } onChange={ (e) => { this.handleChange('name', e.target.value) } }></input>
