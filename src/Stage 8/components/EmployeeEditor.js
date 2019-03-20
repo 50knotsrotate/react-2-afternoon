@@ -1,15 +1,56 @@
 import React, { Component } from 'react';
 
 class EmployeeEditor extends Component {
-  // constructor
+  constructor(props) { 
+    super(props)
 
-  // componentWillReceiveProps
+    this.state = {
+      employee: null,
+      originalEmployee: null,
+      notModified: true
+    }
+  }
 
-  // handleChange
+  componentWillReceiveProps(props) { 
+    this.setState({
+      employee: Object.assign({}, props.selected),
+      originalEmployee: props.selected
+    })
+  }
 
-  // save
 
-  // cancel
+  handleChange(prop, value) { 
+
+    if (this.state.notModified) {
+      this.state.notModified = false
+    }
+
+    var copy = Object.assign({}, this.state.employee)
+    copy[prop] = value
+
+    this.setState({
+      employee: copy
+    })
+  }
+
+  save() { 
+    this.state.originalEmployee.updateName(this.state.employee.name)
+    this.state.originalEmployee.updatePhone(this.state.employee.phone)
+    this.state.originalEmployee.updateTitle(this.state.employee.title)
+
+    this.setState({
+      originalEmployee: this.state.employee,
+      notModified: !this.state.notModified
+    })
+
+    this.props.refreshList()
+  }
+
+  cancel() { 
+    this.setState({
+      employee: this.state.originalEmployee
+    })
+  }
   
   render() {
     return (
@@ -21,8 +62,8 @@ class EmployeeEditor extends Component {
             <span id="employeeID"> ID: { this.state.employee.id } </span>
             <p id="employeeTitle"> { this.state.originalEmployee.name } </p>
             <br />
-            <button id="saveBtn" className="confirmationButton" disabled={this.state.notModified} onClick={ this.save }> Save </button>
-            <button className="neutralButton" disabled={this.state.notModified} onClick={ this.cancel }> Cancel </button>
+            <button id="saveBtn" className="confirmationButton" disabled={this.state.notModified} onClick={ this.save.bind(this) }> Save </button>
+            <button className="neutralButton" disabled={this.state.notModified} onClick={ this.cancel.bind(this) }> Cancel </button>
             <br />
             <span className="placeholderText"> Name </span>
             <input className="materialInput" value={ this.state.employee.name } onChange={ (e) => { this.handleChange('name', e.target.value) } }></input>
